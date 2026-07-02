@@ -44,11 +44,11 @@ function PosesPage() {
             key={pose.id}
             className="flex flex-col rounded-2xl border border-border/60 bg-card p-6 shadow-sm"
           >
-            <div className="overflow-hidden rounded-3xl bg-muted">
+            <div className="overflow-hidden rounded-3xl bg-white border border-border/40">
               <img
                 src={pose.image}
                 alt={`${pose.name} pose illustration`}
-                className="h-40 w-full object-cover object-center"
+                className="h-40 w-full object-contain object-center p-2"
               />
             </div>
             <div className="flex items-center justify-between">

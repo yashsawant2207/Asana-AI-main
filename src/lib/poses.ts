@@ -1,8 +1,8 @@
 const poseImages: Record<string, string> = {
   tree: "/assets/yoga-poses/vrikshasana.png",
-  warrior_i: "/assets/yoga-poses/virabhadrasana-i.png",
-  warrior_ii: "/assets/yoga-poses/virabhadrasana-ii.png",
-  warrior_iii: "/assets/yoga-poses/virabhadrasana-iii.png",
+  warrior_i: "/assets/yoga-poses/virbhadrasana-i.png",
+  warrior_ii: "/assets/yoga-poses/virbhadrasana-ii.png",
+  warrior_iii: "/assets/yoga-poses/virbhadrasana-iii.png",
   cobra: "/assets/yoga-poses/bhujangasana.png",
   bow: "/assets/yoga-poses/dhanurasana.png",
   archer: "/assets/yoga-poses/akarna-dhanurasana.png",

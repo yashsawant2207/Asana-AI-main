@@ -7,6 +7,7 @@ export interface PoseFeedback {
   landmarks: Landmark[];
   isCorrect: boolean;
   messages: string[];
+  audioMessages: string[];
   detected: boolean;
 }
 
@@ -18,6 +19,7 @@ interface BackendMessage {
   landmarks?: Landmark[];
   is_correct?: boolean;
   feedback_msgs?: string[];
+  audio_msgs?: string[];
   detected?: boolean;
 }
 
@@ -66,6 +68,7 @@ export function usePoseSocket(poseId: string) {
           landmarks: data.landmarks ?? [],
           isCorrect: Boolean(data.is_correct),
           messages: data.feedback_msgs ?? [],
+          audioMessages: data.audio_msgs ?? [],
           detected: data.detected ?? (data.landmarks?.length ?? 0) > 0,
         });
       } catch {

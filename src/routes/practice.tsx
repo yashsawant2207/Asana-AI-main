@@ -44,7 +44,7 @@ function PracticePage() {
 
   const { status, feedback, connect, disconnect, sendFrame, wsUrl } = usePoseSocket(poseId);
   const pose = getPose(poseId)!;
-  useAudioFeedback(feedback?.messages, running && voiceEnabled);
+  useAudioFeedback(feedback?.audioMessages, feedback?.messages, running && voiceEnabled);
 
   // Track how long the pose has been held correctly.
   useEffect(() => {
@@ -216,11 +216,11 @@ function PracticePage() {
             </button>
           </div>
 
-          <div className="overflow-hidden rounded-3xl bg-muted">
+          <div className="overflow-hidden rounded-3xl bg-white border border-border/40">
             <img
               src={pose.image}
               alt={`Preview of ${pose.name}`}
-              className="h-48 w-full object-cover object-center"
+              className="h-48 w-full object-contain object-center p-2"
             />
           </div>
 
@@ -307,7 +307,7 @@ function FeedbackPanel({
 
   if (!feedback.detected) {
     return (
-      <div className="rounded-2xl border border-border/60 bg-card p-5 text-sm text-muted-foreground shadow-sm">
+      <div className="rounded-2xl border border-destructive/40 bg-destructive/10 p-5 text-sm text-destructive shadow-sm animate-pulse">
         Please step back. Your entire body must be visible to start checking the pose.
       </div>
     );
