@@ -21,6 +21,8 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 
 Point the frontend at it via `VITE_CV_BACKEND_WS_URL=ws://localhost:8000/ws`.
 
+To enable Kokoro backend audio, set `AUDIO_MODEL_PATH` to a local Kokoro model directory or model artifact path before starting the server. The backend exposes `GET /audio?text=...&language=en-US` and returns WAV audio.
+
 ## 3. Deploy to Google Cloud Run
 
 ```bash

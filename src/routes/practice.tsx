@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { CheckCircle2, CircleDashed, Play, Square, Wifi, WifiOff } from "lucide-react";
+import { CheckCircle2, CircleDashed, Play, Square, Volume2, Wifi, WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { POSES, getPose } from "@/lib/poses";
 import { usePoseSocket } from "@/hooks/use-pose-socket";
+import { useAudioFeedback } from "@/hooks/use-audio-feedback";
 import { drawPose, clearCanvas } from "@/lib/pose-overlay";
 
 export const Route = createFileRoute("/practice")({
@@ -30,6 +31,7 @@ function PracticePage() {
   const [running, setRunning] = useState(false);
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [holdSeconds, setHoldSeconds] = useState(0);
+  const [voiceEnabled, setVoiceEnabled] = useState(true);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -42,6 +44,7 @@ function PracticePage() {
 
   const { status, feedback, connect, disconnect, sendFrame, wsUrl } = usePoseSocket(poseId);
   const pose = getPose(poseId)!;
+  useAudioFeedback(feedback?.messages, running && voiceEnabled);
 
   // Track how long the pose has been held correctly.
   useEffect(() => {
@@ -196,6 +199,21 @@ function PracticePage() {
                 </option>
               ))}
             </select>
+          </div>
+
+          <div className="flex items-center justify-between gap-3 rounded-2xl border border-border/60 bg-card p-4 shadow-sm">
+            <div>
+              <p className="text-sm font-medium text-foreground">Voice guidance</p>
+              <p className="text-xs text-muted-foreground">Hear the same instructions as text cues.</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setVoiceEnabled((value) => !value)}
+              className="inline-flex items-center rounded-full border border-border/60 bg-background px-4 py-2 text-sm font-medium text-foreground transition hover:bg-secondary/10"
+            >
+              <Volume2 className="mr-2 h-4 w-4" />
+              {voiceEnabled ? "On" : "Off"}
+            </button>
           </div>
 
           <div className="overflow-hidden rounded-3xl bg-muted">

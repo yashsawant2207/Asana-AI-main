@@ -2,13 +2,16 @@
 
 Run locally:  uvicorn app.main:app --host 0.0.0.0 --port 8000
 """
+import io
 import asyncio
 import json
 from concurrent.futures import ThreadPoolExecutor
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 
+from app.audio import audio_engine
 from app.cv.landmarker import PoseTracker
 from app.cv.registry import evaluate
 
@@ -97,6 +100,27 @@ def _is_full_body_visible(landmarks):
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+@app.get("/audio")
+def get_audio(
+    text: str,
+    language: str = "en-US",
+    voice: str = "",
+    speed: float = 1.0,
+):
+    """Generate a short spoken audio clip from text using the Kokor0-v1.0 backend."""
+    if not text.strip():
+        raise HTTPException(status_code=400, detail="The text query parameter cannot be empty.")
+
+    try:
+        wav_bytes = audio_engine.synthesize_wav(text, language=language, voice=voice or None, speed=speed)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc))
+
+    return StreamingResponse(io.BytesIO(wav_bytes), media_type="audio/wav")
 
 
 @app.websocket("/ws")
